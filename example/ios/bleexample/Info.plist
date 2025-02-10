@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>myapp</string>
-          <string>com.nishit-chauhan.bleexample</string>
+          <string>com.tops.ble</string>
         </array>
       </dict>
     </array>

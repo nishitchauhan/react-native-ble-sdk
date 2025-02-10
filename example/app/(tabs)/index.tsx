@@ -16,7 +16,6 @@ import {
 } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import BLESDK, {
   Peripheral,
   BleDisconnectPeripheralEvent,
@@ -24,6 +23,9 @@ import BLESDK, {
   BleScanCallbackType,
   BleScanMode,
 } from "../../utils/ble";
+import { router } from "expo-router";
+
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 const SECONDS_TO_SCAN_FOR = 3;
 const SERVICE_UUIDS: string[] = [];
@@ -37,8 +39,17 @@ declare module "react-native-ble-manager" {
   }
 }
 
+type RootStackParamList = {
+  ScanDevicesScreen: undefined;
+  DetailsScreen: { peripheralData: Peripheral };
+};
+
 const ScanDevicesScreen = () => {
-  const navigation = useNavigation();
+  type NavigationProp = NativeStackScreenProps<
+    RootStackParamList,
+    "ScanDevicesScreen"
+  >;
+  const { navigation } = useNavigation<NavigationProp>();
 
   const [isScanning, setIsScanning] = useState(false);
   const [peripherals, setPeripherals] = useState(
@@ -236,9 +247,63 @@ const ScanDevicesScreen = () => {
           }
           return map;
         });
+
+        /* Test read current RSSI value, retrieve services first */
+        const peripheralData = await BLESDK.retrieveServices(peripheral.id);
+        console.log(
+          `[connectPeripheral][${peripheral.id}] retrieved peripheral services`,
+          peripheralData
+        );
+
+        setPeripherals((map) => {
+          let p = map.get(peripheral.id);
+          if (p) {
+            return new Map(map.set(p.id, p));
+          }
+          return map;
+        });
+
+        const rssi = await BLESDK.readRSSI(peripheral.id);
+        console.log(
+          `[connectPeripheral][${peripheral.id}] retrieved current RSSI value: ${rssi}.`
+        );
+
+        if (peripheralData.characteristics) {
+          for (const characteristic of peripheralData.characteristics) {
+            if (characteristic.descriptors) {
+              for (const descriptor of characteristic.descriptors) {
+                try {
+                  let data = await BLESDK.readDescriptor(
+                    peripheral.id,
+                    characteristic.service,
+                    characteristic.characteristic,
+                    descriptor.uuid
+                  );
+                  console.log(
+                    `[connectPeripheral][${peripheral.id}] ${characteristic.service} ${characteristic.characteristic} ${descriptor.uuid} descriptor read as:`,
+                    data
+                  );
+                } catch (error) {
+                  console.log(
+                    `[connectPeripheral][${peripheral.id}] failed to retrieve descriptor ${descriptor} for characteristic ${characteristic}:`,
+                    error
+                  );
+                }
+              }
+            }
+          }
+        }
+        console.log("PeripheralData:", peripheralData);
+        // navigation.navigate("DetailsScreen", {
+        //   peripheralData: peripheralData,
+        // });
+        router.navigate({
+          pathname: "/bleDetails",
+          params: { peripheralData: JSON.stringify(peripheralData) },
+        });
       }
     } catch (error) {
-      console.error(
+      console.log(
         `[connectPeripheral][${peripheral.id}] connectPeripheral error`,
         error
       );

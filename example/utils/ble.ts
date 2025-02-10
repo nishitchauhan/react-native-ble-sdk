@@ -77,6 +77,28 @@ class BLESDK {
     return BleManager.getBondedPeripherals();
   }
 
+  retrieveServices(deviceId: string) {
+    return BleManager.retrieveServices(deviceId);
+  }
+
+  readRSSI(deviceId: string) {
+    return BleManager.readRSSI(deviceId);
+  }
+
+  readDescriptor(
+    deviceId: string,
+    serviceUUID: string,
+    characteristicUUID: string,
+    descriptorUUID: string
+  ) {
+    return BleManager.readDescriptor(
+      deviceId,
+      serviceUUID,
+      characteristicUUID,
+      descriptorUUID
+    );
+  }
+
   startNotification(
     deviceId: string,
     serviceUUID: string,

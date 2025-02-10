@@ -9,8 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.nishit-chauhan.bleexample"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.tops.ble"
     },
     "android": {
       "adaptiveIcon": {
