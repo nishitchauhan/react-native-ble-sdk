@@ -13,6 +13,8 @@ import {
   FlatList,
   TouchableHighlight,
   Pressable,
+  Alert,
+  Linking,
 } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -22,6 +24,7 @@ import BLESDK, {
   BleScanMatchMode,
   BleScanCallbackType,
   BleScanMode,
+  BleState,
 } from "../../utils/ble";
 import { router } from "expo-router";
 
@@ -60,12 +63,22 @@ const ScanDevicesScreen = () => {
     try {
       await BLESDK.start();
       const res = await BLESDK.isBluetoothEnabled();
-
-      if (res == "off") {
-        await enableBluetooth();
+      if (res == BleState.Off) {
+        Platform.OS === "android"
+          ? await enableBluetooth()
+          : Alert.alert(
+              "Enable Bluetooth",
+              "Bluetooth is required to use this app, please enable it in your device settings.",
+              [
+                {
+                  text: "OK",
+                  onPress: () => Linking.openURL("App-Prefs:root"),
+                },
+              ]
+            );
       }
     } catch (error) {
-      console.error("Unexpected error starting BleManager.", error);
+      console.log("Unexpected error starting BleManager.", error);
     }
   };
 
@@ -101,7 +114,7 @@ const ScanDevicesScreen = () => {
             "[handleAndroidPermissions] User accepts runtime permissions android 12+"
           );
         } else {
-          console.error(
+          console.log(
             "[handleAndroidPermissions] User refuses runtime permissions android 12+"
           );
         }
@@ -123,7 +136,7 @@ const ScanDevicesScreen = () => {
                 "[handleAndroidPermissions] User accepts runtime permission android <12"
               );
             } else {
-              console.error(
+              console.log(
                 "[handleAndroidPermissions] User refuses runtime permission android <12"
               );
             }
@@ -155,10 +168,10 @@ const ScanDevicesScreen = () => {
             console.log("[startScan] scan promise returned successfully.");
           })
           .catch((err: any) => {
-            console.error("[startScan] ble scan returned in error", err);
+            console.log("[startScan] ble scan returned in error", err);
           });
       } catch (error) {
-        console.error("[startScan] ble scan error thrown", error);
+        console.log("[startScan] ble scan error thrown", error);
       }
     }
   };
@@ -168,7 +181,7 @@ const ScanDevicesScreen = () => {
       console.log("[enableBluetooth]");
       await BLESDK.enableBluetooth();
     } catch (error) {
-      console.error("[enableBluetooth] thrown", error);
+      console.log("[enableBluetooth] thrown", error);
     }
   };
 
@@ -213,7 +226,7 @@ const ScanDevicesScreen = () => {
         console.log("Disconnect peripheral");
         await BLESDK.disconnect(peripheral.id);
       } catch (error) {
-        console.error(
+        console.log(
           `[togglePeripheralConnection][${peripheral.id}] error when trying to disconnect device.`,
           error
         );

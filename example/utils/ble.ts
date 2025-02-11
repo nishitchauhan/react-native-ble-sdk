@@ -2,6 +2,7 @@ import { Platform, PermissionsAndroid } from "react-native";
 import BleManager, {
   Peripheral,
   BleDisconnectPeripheralEvent,
+  BleState,
 } from "react-native-ble-manager";
 
 export type { Peripheral, BleDisconnectPeripheralEvent };
@@ -10,6 +11,7 @@ export {
   BleScanMatchMode,
   BleScanCallbackType,
   BleScanMode,
+  BleState,
 } from "react-native-ble-manager";
 
 class BLESDK {
@@ -73,10 +75,6 @@ class BLESDK {
     return BleManager.getConnectedPeripherals(serviceUUIDs);
   }
 
-  getBondedPeripherals() {
-    return BleManager.getBondedPeripherals();
-  }
-
   retrieveServices(deviceId: string) {
     return BleManager.retrieveServices(deviceId);
   }
@@ -96,6 +94,22 @@ class BLESDK {
       serviceUUID,
       characteristicUUID,
       descriptorUUID
+    );
+  }
+
+  writeDescriptor(
+    deviceId: string,
+    serviceUUID: string,
+    characteristicUUID: string,
+    descriptorUUID: string,
+    data: number[]
+  ) {
+    return BleManager.writeDescriptor(
+      deviceId,
+      serviceUUID,
+      characteristicUUID,
+      descriptorUUID,
+      data
     );
   }
 
@@ -177,8 +191,8 @@ class BLESDK {
     return BleManager.isPeripheralConnected(deviceId, serviceUUIDs);
   }
 
-  removePeripheral(deviceId: string) {
-    return BleManager.removePeripheral(deviceId);
+  isScanning() {
+    return BleManager.isScanning();
   }
 
   isBluetoothEnabled() {
@@ -213,6 +227,104 @@ class BLESDK {
   onUpdateState(callback: any) {
     const subscription = BleManager.onDidUpdateState(callback);
     return subscription;
+  }
+
+  onPeripheralDidBond(callback: any) {
+    const subscription = BleManager.onPeripheralDidBond(callback);
+    return subscription;
+  }
+
+  onCentralManagerWillRestoreState(callback: any) {
+    // IOS only
+    const subscription = BleManager.onCentralManagerWillRestoreState(callback);
+    return subscription;
+  }
+
+  onDidUpdateNotificationStateFor(callback: any) {
+    // IOS only
+    const subscription = BleManager.onDidUpdateNotificationStateFor(callback);
+    return subscription;
+  }
+
+  onCompanionPeripheral(callback: any) {
+    // Android only
+    const subscription = BleManager.onCompanionPeripheral(callback);
+    return subscription;
+  }
+
+  supportsCompanion() {
+    // Android only
+    return BleManager.supportsCompanion();
+  }
+
+  startNotificationWithBuffer(
+    deviceId: string,
+    serviceUUID: string,
+    characteristicUUID: string,
+    buffer: number
+  ) {
+    // Android only
+    return BleManager.startNotificationUseBuffer(
+      deviceId,
+      serviceUUID,
+      characteristicUUID,
+      buffer
+    );
+  }
+
+  refreshCache(deviceId: string) {
+    // Android only
+    return BleManager.refreshCache(deviceId);
+  }
+
+  getAssociatedPeripherals() {
+    // Android only
+    return BleManager.getAssociatedPeripherals();
+  }
+
+  removeAssociatedPeripheral(deviceId: string) {
+    // Android only
+    return BleManager.removeAssociatedPeripheral(deviceId);
+  }
+
+  createBond(deviceId: string, peripheralPin?: string) {
+    // Android only
+    return BleManager.createBond(deviceId, peripheralPin);
+  }
+
+  removeBond(deviceId: string) {
+    // Android only
+    return BleManager.removeBond(deviceId);
+  }
+
+  getBondedPeripherals() {
+    // Android only
+    return BleManager.getBondedPeripherals();
+  }
+
+  getDiscoveredPeripherals() {
+    // Android only
+    return BleManager.getDiscoveredPeripherals();
+  }
+
+  removePeripheral(deviceId: string) {
+    // Android only
+    return BleManager.removePeripheral(deviceId);
+  }
+
+  setName(name: string) {
+    // Android only
+    return BleManager.setName(name);
+  }
+
+  getMaximumWriteValueLengthForWithoutResponse(deviceId: string) {
+    // IOS only
+    return BleManager.getMaximumWriteValueLengthForWithoutResponse(deviceId);
+  }
+
+  getMaximumWriteValueLengthForWithResponse(deviceId: string) {
+    // IOS only
+    return BleManager.getMaximumWriteValueLengthForWithResponse(deviceId);
   }
 }
 

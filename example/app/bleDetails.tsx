@@ -1,4 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 
@@ -23,39 +24,42 @@ const DetailsScreen = () => {
   };
 
   return (
-    <ScrollView
-      style={styles.scrollViewStyle}
-      contentContainerStyle={styles.contentContainer}
-    >
-      <Text style={styles.title}>Peripheral Details</Text>
-      <Text style={styles.detail}>name: {data.name}</Text>
-      <Text style={styles.detail}>id: {data.id}</Text>
-      <Text style={styles.detail}>rssi: {data.rssi}</Text>
+    <View style={styles.container}>
+      <ScrollView
+        style={styles.scrollViewStyle}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <Text style={styles.title}>Peripheral Details</Text>
+        <Text style={styles.detail}>name: {data.name}</Text>
+        <Text style={styles.detail}>id: {data.id}</Text>
+        <Text style={styles.detail}>rssi: {data.rssi}</Text>
 
-      <Text style={[styles.title, styles.titleWithMargin]}>Advertising</Text>
-      <Text style={styles.detail}>
-        localName: {data?.advertising?.localName}
-      </Text>
-      <Text style={styles.detail}>
-        txPowerLevel: {data.advertising.txPowerLevel}
-      </Text>
-      <Text style={styles.detail}>
-        isConnectable: {data.advertising.isConnectable ? "true" : "false"}
-      </Text>
-      <Text style={styles.detail}>
-        serviceUUIDs: {data.advertising.serviceUUIDs}
-      </Text>
+        <Text style={[styles.title, styles.titleWithMargin]}>Advertising</Text>
+        <Text style={styles.detail}>
+          localName: {data?.advertising?.localName}
+        </Text>
+        <Text style={styles.detail}>
+          txPowerLevel: {data.advertising.txPowerLevel}
+        </Text>
+        <Text style={styles.detail}>
+          isConnectable: {data.advertising.isConnectable ? "true" : "false"}
+        </Text>
+        <Text style={styles.detail}>
+          serviceUUIDs: {data.advertising.serviceUUIDs}
+        </Text>
 
-      <Text style={[styles.title, styles.titleWithMargin]}>
-        Services && Characteristics
-      </Text>
-      {data.services?.map((service, index) => (
-        <View key={index} style={styles.serviceContainer}>
-          <Text style={styles.serviceTitle}>Service: {service.uuid}</Text>
-          {renderCharacteristicsForService(service.uuid)}
-        </View>
-      ))}
-    </ScrollView>
+        <Text style={[styles.title, styles.titleWithMargin]}>
+          Services && Characteristics
+        </Text>
+        {data.services?.map((service, index) => (
+          <View key={index} style={styles.serviceContainer}>
+            <Text style={styles.serviceTitle}>Service: {service.uuid}</Text>
+            {renderCharacteristicsForService(service.uuid)}
+          </View>
+        ))}
+      </ScrollView>
+      <StatusBar style="auto" />
+    </View>
   );
 };
 
@@ -64,6 +68,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: "white",
   },
   title: {
     fontSize: 20,
