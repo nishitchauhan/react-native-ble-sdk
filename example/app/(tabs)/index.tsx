@@ -18,6 +18,15 @@ import {
 } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
+// import BLESDK, {
+//   Peripheral,
+//   BleDisconnectPeripheralEvent,
+//   BleScanMatchMode,
+//   BleScanCallbackType,
+//   BleScanMode,
+//   BleState,
+// } from "../../utils/ble";
+
 import BLESDK, {
   Peripheral,
   BleDisconnectPeripheralEvent,
@@ -25,7 +34,8 @@ import BLESDK, {
   BleScanCallbackType,
   BleScanMode,
   BleState,
-} from "../../utils/ble";
+} from "@nishit_chauhan/react-native-ble-sdk";
+
 import { router } from "expo-router";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";

@@ -10,6 +10,7 @@ export {
   BleScanMatchMode,
   BleScanCallbackType,
   BleScanMode,
+  BleState,
 } from "react-native-ble-manager";
 
 class BLESDK {

@@ -2,7 +2,6 @@ import { Platform, PermissionsAndroid } from "react-native";
 import BleManager, {
   Peripheral,
   BleDisconnectPeripheralEvent,
-  BleState,
 } from "react-native-ble-manager";
 
 export type { Peripheral, BleDisconnectPeripheralEvent };
