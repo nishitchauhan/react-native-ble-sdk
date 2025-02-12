@@ -28,6 +28,7 @@ const DetailsScreen = () => {
       <ScrollView
         style={styles.scrollViewStyle}
         contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
       >
         <Text style={styles.title}>Peripheral Details</Text>
         <Text style={styles.detail}>name: {data.name}</Text>

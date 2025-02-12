@@ -18,15 +18,6 @@ import {
 } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
-// import BLESDK, {
-//   Peripheral,
-//   BleDisconnectPeripheralEvent,
-//   BleScanMatchMode,
-//   BleScanCallbackType,
-//   BleScanMode,
-//   BleState,
-// } from "../../utils/ble";
-
 import BLESDK, {
   Peripheral,
   BleDisconnectPeripheralEvent,
@@ -72,21 +63,6 @@ const ScanDevicesScreen = () => {
   const start = async () => {
     try {
       await BLESDK.start();
-      const res = await BLESDK.isBluetoothEnabled();
-      if (res == BleState.Off) {
-        Platform.OS === "android"
-          ? await enableBluetooth()
-          : Alert.alert(
-              "Enable Bluetooth",
-              "Bluetooth is required to use this app, please enable it in your device settings.",
-              [
-                {
-                  text: "OK",
-                  onPress: () => Linking.openURL("App-Prefs:root"),
-                },
-              ]
-            );
-      }
     } catch (error) {
       console.log("Unexpected error starting BleManager.", error);
     }
@@ -156,8 +132,29 @@ const ScanDevicesScreen = () => {
     }
   };
 
-  const startScan = () => {
-    if (!isScanning) {
+  const checkBluetoothState = async () => {
+    const res = await BLESDK.isBluetoothEnabled();
+    if (res == BleState.Off) {
+      Platform.OS === "android"
+        ? await enableBluetooth()
+        : Alert.alert(
+            "Enable Bluetooth",
+            "Bluetooth is required to use this app, please enable it in your device settings.",
+            [
+              {
+                text: "OK",
+                onPress: () => Linking.openURL("App-Prefs:root"),
+              },
+            ]
+          );
+    }
+    return res == BleState.On;
+  };
+
+  const startScan = async () => {
+    const isEnable = await checkBluetoothState();
+
+    if (!isScanning && isEnable) {
       // reset found peripherals before scan
       setPeripherals(new Map<Peripheral["id"], Peripheral>());
 
