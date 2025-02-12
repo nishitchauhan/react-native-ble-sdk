@@ -7,7 +7,7 @@ A simple JavaScript SDK wrapper for `react-native-ble-manager` to handle Bluetoo
 ### 1. Install the SDK
 
 ```sh
-npm install react-native-ble-sdk
+npm install @nishit_chauhan/react-native-ble-sdk
 ```
 
 ### 2. Install Peer Dependencies
