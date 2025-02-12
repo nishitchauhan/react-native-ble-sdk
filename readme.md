@@ -7,7 +7,7 @@ A simple JavaScript SDK wrapper for `react-native-ble-manager` to handle Bluetoo
 ### 1. Install the SDK
 
 ```sh
-npm install react-native-ble-sdk
+npm install react-native-bleManager-sdk
 ```
 
 ### 2. Install Peer Dependencies
@@ -91,6 +91,33 @@ BLESDK.readCharacteristic(
 BLESDK.writeCharacteristic("DEVICE_ID", "SERVICE_UUID", "CHARACTERISTIC_UUID", [
   0x01,
 ]).then(() => console.log("Write successful"));
+
+// Start notification
+BLESDK.startNotification(
+  "DEVICE_ID",
+  "SERVICE_UUID",
+  "CHARACTERISTIC_UUID"
+).then(() => console.log("Notification started"));
+
+// Stop notification
+BLESDK.stopNotification(
+  "DEVICE_ID",
+  "SERVICE_UUID",
+  "CHARACTERISTIC_UUID"
+).then(() => console.log("Notification stopped"));
+
+// Retrieve connected devices
+BLESDK.retrieveConnectedDevices([]).then((devices) =>
+  console.log("Connected devices:", devices)
+);
+
+// Check if a device is connected
+BLESDK.isPeripheralConnected("DEVICE_ID").then((isConnected) =>
+  console.log("Device connected:", isConnected)
+);
+
+// Read RSSI
+BLESDK.readRSSI("DEVICE_ID").then((rssi) => console.log("RSSI:", rssi));
 ```
 
 ## Event Listeners
@@ -98,8 +125,24 @@ BLESDK.writeCharacteristic("DEVICE_ID", "SERVICE_UUID", "CHARACTERISTIC_UUID", [
 Listen for BLE events:
 
 ```typescript
-BLESDK.listenForEvents("BleManagerDiscoverPeripheral", (data) => {
+// Listen for stop scan
+BLESDK.onStopScan(() => {
+  console.log("Stopped scanning");
+});
+
+// Listen for discovered devices
+BLESDK.onDiscoverPeripheral((data) => {
   console.log("Discovered Device:", data);
+});
+
+// Listen for connection events
+BLESDK.onConnectPeripheral((device) => {
+  console.log("Connected to:", device);
+});
+
+// Listen for disconnection events
+BLESDK.onDisconnectPeripheral((device) => {
+  console.log("Disconnected from:", device);
 });
 ```
 

@@ -1,5 +1,5 @@
 {
-  "name": "react-native-ble-sdk",
+  "name": "react-native-bleManager-sdk",
   "version": "1.0.0",
   "description": "ble sdk",
   "main": "src/index.ts",
