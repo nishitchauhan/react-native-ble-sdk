@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/nishitchauhan/reacet-native-ble-sdk#readme",
   "dependencies": {
-    "react-native-ble-manager": "^12.1.3"
+    "react-native-ble-manager": "^12.1.4"
   },
   "devDependencies": {
     "@types/react-native": "^0.73.0",
